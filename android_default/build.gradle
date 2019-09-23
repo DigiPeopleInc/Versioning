@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+    }
+}
+
+apply plugin: 'groovy'
+
+group 'com'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+dependencies {
+    compile gradleApi()
+    compileOnly 'com.android.tools.build:gradle:3.4.2'
+}
+
+ext {
+    publishGroupId = 'ru.digipeople.versioning'
+    publishArtifactId = 'android-default'
+    publishVersion = '1.0.0'
+    publishDesc = "Gradle versioning plugin"
+    publishVcsUrl = "https://github.com/DigiPeopleInc/Versioning"
+}
+
+apply from: '../publish.gradle'

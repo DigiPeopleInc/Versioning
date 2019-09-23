@@ -1,0 +1,76 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.java.srcDirs
+}
+
+//task javadoc(type: Javadoc) {
+//    source = sourceSets.main.java.srcDirs
+////    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+////    android.libraryVariants.all { variant ->
+////        owner.classpath += variant.javaCompile.classpath
+////    }
+////    exclude('**/*.kt')
+//}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        production(MavenPublication) {
+            artifact("$buildDir/libs/${project.name}-${project.version}.jar")
+            artifact sourcesJar
+            artifact javadocJar
+            groupId = publishGroupId
+            artifactId = publishArtifactId
+            version = publishVersion
+
+            // The publication doesn't know about our dependencies,
+            // so we have to manually add them to the pom
+            pom.withXml {
+//                def dependenciesNode = asNode().appendNode('dependencies')
+//
+//                // Iterate over the compile dependencies (we don't want the test ones),
+//                // adding a <dependency> node for each
+//                configurations.api.allDependencies.each {
+//                    def dependencyNode = dependenciesNode.appendNode('dependency')
+//                    dependencyNode.appendNode('groupId', it.group)
+//                    dependencyNode.appendNode('artifactId', it.name)
+//                    dependencyNode.appendNode('version', it.version)
+//                }
+            }
+        }
+    }
+}
+
+bintray {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    publish = true
+    pkg {
+        repo = "maven"
+        name = publishArtifactId
+        licenses = ["Apache-2.0"]
+        publicDownloadNumbers = true
+        desc = publishDesc
+        vcsUrl = publishVcsUrl
+        version {
+            name = publishVersion
+            vcsTag = publishVersion
+        }
+    }
+    publications = ['production']
+}
+
+task cleanJarPublish(type: GradleBuild) {
+    group = "publishing"
+    tasks = ['clean', 'jar', 'bintrayUpload']
+}
