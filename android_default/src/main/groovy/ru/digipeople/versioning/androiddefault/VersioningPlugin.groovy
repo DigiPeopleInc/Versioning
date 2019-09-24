@@ -26,18 +26,27 @@ class VersioningPlugin implements Plugin<Project> {
                 println "##teamcity[buildNumber '${versionName}']"
             }
 
+
             def flavor = variant.flavorName
             def buildType = variant.buildType.name.capitalize()
 
-            def fullVersionName
-            def isProdFlavor = flavor.toLowerCase().contains('prod')
-            def isReleaseBuildType = buildType == 'Release'
+            def versionNameSuffix = "$flavor$buildType"
+            if (versionNameSuffix.endsWithAny("ProdRelease", "prodRelease")) {
+                def end = versionNameSuffix.length() - "ProdRelease".length()
+                versionNameSuffix = versionNameSuffix.substring(0, end)
+            } else if (versionNameSuffix.endsWithAny("Release", "release")) {
+                def end = versionNameSuffix.length() - "Release".length()
+                versionNameSuffix = versionNameSuffix.substring(0, end)
+            }
 
-            if (isProdFlavor && isReleaseBuildType) {
+            def fullVersionName
+            if (versionNameSuffix.isEmpty()) {
                 fullVersionName = versionName
             } else {
-                fullVersionName = "$versionName-$flavor$buildType"
+                fullVersionName = "$versionName-$versionNameSuffix"
             }
+
+            println "fullVersionName $fullVersionName"
 
             variant.buildConfigField('String', 'FULL_VERSION_NAME', "\"$fullVersionName\"")
 
