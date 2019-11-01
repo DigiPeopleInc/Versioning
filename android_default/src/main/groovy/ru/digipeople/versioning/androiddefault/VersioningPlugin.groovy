@@ -59,11 +59,11 @@ class VersioningPlugin implements Plugin<Project> {
     }
 
     String getBuildNumber(Project project) {
-        if (project.hasProperty("build.shared_number")) {
-            return project.ext["build.shared_number"]
+        if (project.hasProperty("build.shared_counter")) {
+            return project.ext["build.shared_counter"]
         }
-        if (project.hasProperty("build.number")) {
-            return project.ext["build.number"]
+        if (project.hasProperty("build.counter")) {
+            return project.ext["build.counter"]
         }
         return "0"
     }

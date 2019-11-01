@@ -10,7 +10,7 @@ buildscript {
 apply plugin: 'groovy'
 
 group 'com'
-version '1.0.0'
+version '1.0.1'
 
 repositories {
     mavenCentral()
@@ -25,7 +25,7 @@ dependencies {
 ext {
     publishGroupId = 'ru.digipeople.versioning'
     publishArtifactId = 'android-default'
-    publishVersion = '1.0.0'
+    publishVersion = '1.0.1'
     publishDesc = "Gradle versioning plugin"
     publishVcsUrl = "https://github.com/DigiPeopleInc/Versioning"
 }

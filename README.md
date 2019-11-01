@@ -12,8 +12,8 @@ In case if full version name ens with *"Prod"* or *"ProdRelese"* those suffixes 
 
 Full mask of .apk file is **{versioning.appName}\_{versionName}.{buildNumber}\_{flavor}{buildType}.apk**
 
-Build number is extracted form project properties "*build.shared_number*" or "*build.number*"  
-Default valus is *0*.
+Build number is extracted from project properties "*build.shared_counter*" or "*build.counter*"  
+Default value is *0*.
 
 ###### Example:
 Assuming there are 
@@ -66,7 +66,7 @@ buildscript {
 
     dependencies {
         // Other dependencies
-        classpath 'ru.digipeople.versioning:android-default:1.0.0'
+        classpath 'ru.digipeople.versioning:android-default:1.0.1'
     }
 }
 
